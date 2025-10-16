@@ -1,0 +1,17 @@
+from flask import Flask, request, jsonify
+from dqn_chess_app import train
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "<h1>Chess DQN AI Web App</h1><p>POST to /train to train the agent.</p>"
+
+@app.route('/train', methods=['POST'])
+def train_agent():
+    episodes = request.json.get('episodes', 10)
+    train(episodes=episodes)
+    return jsonify({'status': 'Training complete', 'episodes': episodes})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
